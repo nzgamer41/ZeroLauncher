@@ -34,51 +34,67 @@ namespace ZeroLauncher
         List<NetworkInterface> networkAdapters = new List<NetworkInterface>();
         public MainWindow()
         {
-            InitializeComponent();
-            foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+            try
             {
-               networkAdapters.Add(nic);
-               comboBoxNetAdapter.Items.Add(nic.Name + " " + nic.GetIPProperties().UnicastAddresses[0].Address.ToString());
-            }
+                InitializeComponent();
+                foreach (NetworkInterface nic in NetworkInterface.GetAllNetworkInterfaces())
+                {
+                    if (nic.Supports(NetworkInterfaceComponent.IPv4) == false)
+                    {
+                        continue;
+                    }
+                    foreach (UnicastIPAddressInformation ip in nic.GetIPProperties().UnicastAddresses)
+                    {
+                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        {
+                            networkAdapters.Add(nic);
+                            comboBoxNetAdapter.Items.Add(nic.Name + " " + ip.Address.ToString());
+                        }
+                    }
+                }
 
-            if (File.Exists("idzconfig.bin"))
+                if (File.Exists("idzconfig.bin"))
+                {
+                    gameConfig = ReadFromBinaryFile<IDZConfig>("idzconfig.bin");
+                    int selAdapter = networkAdapters.FindIndex(x => x.Name == gameConfig.selectedNic);
+                    comboBoxNetAdapter.SelectedIndex = selAdapter;
+                    if (gameConfig.JapOrExp)
+                    {
+                        buttonJap.IsChecked = false;
+                        buttonExp.IsChecked = true;
+                    }
+                    else if (gameConfig.JapOrExp == false)
+                    {
+                        buttonExp.IsChecked = false;
+                        buttonJap.IsChecked = true;
+                    }
+
+                    textBoxGameAMFS.Text = gameConfig.AMFSDir;
+                    if (gameConfig.XOrDInput)
+                    {
+                        buttonDinput.IsChecked = false;
+                        buttonXinput.IsChecked = true;
+                    }
+                    else if (gameConfig.XOrDInput == false)
+                    {
+                        buttonDinput.IsChecked = true;
+                        buttonXinput.IsChecked = false;
+                    }
+
+                    checkBoxIdeal.IsChecked = gameConfig.IdealLan;
+                    checkBoxDistServ.IsChecked = gameConfig.DistServer;
+                    // When I implement a online AIME server this will be togglable
+                    //checkBoxAime.IsChecked = gameConfig.ImitateMe;
+                }
+                else
+                {
+                    comboBoxNetAdapter.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
             {
-                gameConfig = ReadFromBinaryFile<IDZConfig>("idzconfig.bin");
-                int selAdapter = networkAdapters.FindIndex(x => x.Name == gameConfig.selectedNic);
-                comboBoxNetAdapter.SelectedIndex = selAdapter;
-                if (gameConfig.JapOrExp)
-                {
-                    buttonJap.IsChecked = false;
-                    buttonExp.IsChecked = true;
-                }
-                else if (gameConfig.JapOrExp == false)
-                {
-                    buttonExp.IsChecked = false;
-                    buttonJap.IsChecked = true;
-                }
-
-                textBoxGameAMFS.Text = gameConfig.AMFSDir;
-                if (gameConfig.XOrDInput)
-                {
-                    buttonDinput.IsChecked = false;
-                    buttonXinput.IsChecked = true;
-                }
-                else if (gameConfig.XOrDInput == false)
-                {
-                    buttonDinput.IsChecked = true;
-                    buttonXinput.IsChecked = false;
-                }
-
-                checkBoxIdeal.IsChecked = gameConfig.IdealLan;
-                checkBoxDistServ.IsChecked = gameConfig.DistServer;
-                // When I implement a online AIME server this will be togglable
-                //checkBoxAime.IsChecked = gameConfig.ImitateMe;
+                Debug.WriteLine(ex.Message);
             }
-            else
-            {
-                comboBoxNetAdapter.SelectedIndex = 0;
-            }
-
         }
 
         /// <summary>
@@ -126,8 +142,13 @@ namespace ZeroLauncher
         private void configUpdate()
         {
             gameConfig.selectedNic = networkAdapters[comboBoxNetAdapter.SelectedIndex].Name;
-            gameConfig.selectedIP = networkAdapters[comboBoxNetAdapter.SelectedIndex].GetIPProperties()
-                .UnicastAddresses[0].Address.ToString();
+            foreach (UnicastIPAddressInformation ip in networkAdapters[comboBoxNetAdapter.SelectedIndex].GetIPProperties().UnicastAddresses)
+            {
+                if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    gameConfig.selectedIP = ip.Address.ToString();
+                }
+            }
             if ((bool)buttonExp.IsChecked)
             {
                 gameConfig.JapOrExp = true;
@@ -234,8 +255,7 @@ namespace ZeroLauncher
 
         private void gameBoot()
         {
-            AllocConsole();
-            SetConsoleTitle("ZeroLauncher Console Output (contains MiniMe and Amdaemon in one window)");
+
             /*
              *  IDZ needs a very specific chain of things booted because SEGA
              *  Step 1: MiniMe
@@ -245,6 +265,16 @@ namespace ZeroLauncher
              *  this gon' be a bitch
              */
 
+            //  Step 0: Checking for Segatools
+            //put code here dumbass
+            if (!File.Exists(gameConfig.AMFSDir + "\\..\\app\\package\\inject.exe"))
+            {
+                Debug.WriteLine("missing segatools!");
+                MessageBox.Show("You appear to be missing Segatools!\n\nCopy this from the 'deps\\segatools' folder into your 'package' folder where the main game files are,", "Missing segatools", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            AllocConsole();
+            SetConsoleTitle("ZeroLauncher Console Output (contains MiniMe and Amdaemon in one window)");
             //  Step 1: MiniMe.
             //checking for NodeJS
             ThreadStart ths = null;
