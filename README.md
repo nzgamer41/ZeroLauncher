@@ -9,7 +9,7 @@ Download the latest release from the releases tab.
 Compile in VS 2019, then create a deps folder, and extract minime (which you need to find on your own) to a folder called minime inside the deps folder. Otherwise you will have issues
 
 ## Contributing
-vibe checks are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull Requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to test updates before Pull Requesting.
 
