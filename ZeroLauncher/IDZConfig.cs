@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -32,6 +33,10 @@ namespace ZeroLauncher
         public string gear4 { get; set; }
         public string gear5 { get; set; }
         public string gear6 { get; set; }
+        public bool reverseAccelAxis { get; set; }
+        public bool reverseBrakeAxis { get; set; }
+        public string shifterName { get; set; }
+        public string devName { get; set; }
 
 
         public bool ImitateMe = false;
@@ -93,15 +98,43 @@ namespace ZeroLauncher
             fileOutput += "[io3]\nmode=";
             if (XOrDInput)
             {
-                fileOutput += "xinput";
+                fileOutput += "xinput\nautoNeutral=1\nsingleStickSteering=1\nrestrict=97\n\n[dinput]\ndeviceName=\nshifterName=\nbrakeAxis=RZ\naccelAxis=Y\nstart=3\nviewChg=10\nshiftDn=1\nshiftUp=2\ngear1=1\ngear2=2\ngear3=3\ngear4=4\ngear5=5\ngear6=6\nreverseAccelAxis=0\nreverseBrakeAxis=0\n";
             }
             else
             {
-                fileOutput += "dinput";
-            }
+                fileOutput += "dinput\nautoNeutral=1\nsingleStickSteering=1\nrestrict=97\n\n[dinput]\ndeviceName=";
+                fileOutput += devName + "\nshifterName=" + shifterName + "\nbrakeAxis=" + brakeAxis + "\naccelAxis=" + accelAxis + "\nstart=" + startButton + "\nviewChg=" + viewChg + "\nshiftDn=" + shiftDn + "\nshiftUp=" + shiftUp + "\n";
+                if(gear1 != "" && gear2 != "" && gear3 != "" && gear4 != "" && gear5 != "" && gear6 != "")
+                {
+                    fileOutput += "\ngear1="+ gear1 + "\ngear2=" + gear2 + "\ngear3=" + gear3 + "\ngear4=" + gear4 + "\ngear5=" + gear5 + "\ngear6=" + gear6;
+                }
+                else
+                {
+                    Debug.WriteLine("Not using shifter, or not all buttons mapped, sticking with defaults");
+                    fileOutput += "\ngear1=1\ngear2=2\ngear3=3\ngear4=4\ngear5=5\ngear6=6";
+                }
+                fileOutput += "\nreverseAccelAxis=";
+                if (reverseAccelAxis)
+                {
+                    fileOutput += "1";
+                }
+                else
+                {
+                    fileOutput += "0";
+                }
+                fileOutput += "\nreverseBrakeAxis=";
+                if (reverseBrakeAxis)
+                {
+                    fileOutput += "1";
+                }
+                else
+                {
+                    fileOutput += "0";
+                }
+                fileOutput += "\n";
 
-            fileOutput +=
-                "\nautoNeutral=1\nsingleStickSteering=1\nrestrict=97\n\n[dinput]\ndeviceName=\nshifterName=\nbrakeAxis=RZ\naccelAxis=Y\nstart=3\nviewChg=10\nshiftDn=1\nshiftUp=2\ngear1=1\ngear2=2\ngear3=3\ngear4=4\ngear5=5\ngear6=6\nreverseAccelAxis=0\reverseBrakeAxis=0\n";
+            }
+                
             if (File.Exists(AMFSDir + "\\..\\app\\package\\segatools.ini"))
             {
                 File.Delete(AMFSDir + "\\..\\app\\package\\segatools.ini");

@@ -68,7 +68,42 @@ namespace ZeroLauncher
                 _joystick.Poll();
                 var datas = _joystick.GetBufferedData();
                 foreach (var state in datas)
-                    this.Dispatcher.Invoke(() => { try { selTextBox.Text = state.Offset.ToString(); } catch { } });
+                {
+                    //better check for POV thing
+                    if (state.Offset.ToString().Contains("PointOfViewControllers"))
+                    {
+                        MessageBox.Show("Whoops, you've tried to map the D-Pad of your Wheel/Controller to a button.\n\nThis is mapped to the IDZ cabinet's arrow keys already.", state.Offset.ToString() + " is not a valid input!");
+                    }
+                    else
+                    {
+                        if (state.Offset.ToString() == "X" || state.Offset.ToString() == "Y" || state.Offset.ToString() == "Z")
+                        {
+                            this.Dispatcher.Invoke(() => { try { selTextBox.Text = state.Offset.ToString() + " Axis"; } catch { } });
+                        }
+                        else
+                        {
+                            if (state.Offset.ToString().Contains("Buttons"))
+                            {
+                                /* FUCKING SHARPDX
+                                 * Lemme tell you why this is here.
+                                 * SharpDX for some fucking reason maps the buttons like "Button 1" on your DInput gamepad is called "Buttons0"
+                                 * segatools however uses the numbers that you see in controller settings, that start at 1.
+                                 * hence i need to increase the number.
+                                 */
+                              
+                                string lemmefix = state.Offset.ToString().Replace("Buttons", "");
+                                int buttonNo = int.Parse(lemmefix);
+                                buttonNo++;
+                                lemmefix = "Buttons" + buttonNo;
+                                this.Dispatcher.Invoke(() => { try { selTextBox.Text = lemmefix; } catch { } });
+                            }
+                            else
+                            {
+                                this.Dispatcher.Invoke(() => { try { selTextBox.Text = state.Offset.ToString(); } catch { } });
+                            }
+                        }
+                    }
+                }
             }
         }
         
@@ -118,8 +153,24 @@ namespace ZeroLauncher
             List<TextBox> controls = GetAllTextBox();
             try
             {
-                controls[0].Text = "Buttons" + _gameProfile.brakeAxis;
-                controls[1].Text = "Buttons" + _gameProfile.accelAxis;
+                //time to check if Rotation is used
+                if (_gameProfile.brakeAxis.Contains("R"))
+                {
+                    controls[0].Text = _gameProfile.brakeAxis.Replace("R", "Rotation");
+                }
+                else
+                {
+                    controls[0].Text = _gameProfile.brakeAxis + " Axis";
+                }
+                if (controls[1].Text.Contains("R"))
+                {
+                    controls[1].Text = _gameProfile.accelAxis.Replace("R", "Rotation");
+                }
+                else
+                {
+                    controls[1].Text = _gameProfile.accelAxis + " Axis";
+                }
+
                 controls[2].Text = "Buttons" + _gameProfile.startButton;
                 controls[3].Text = "Buttons" + _gameProfile.viewChg;
                 controls[4].Text = "Buttons" + _gameProfile.shiftDn;
@@ -130,6 +181,10 @@ namespace ZeroLauncher
                 controls[9].Text = "Buttons" + _gameProfile.gear4;
                 controls[10].Text = "Buttons" + _gameProfile.gear5;
                 controls[11].Text = "Buttons" + _gameProfile.gear6;
+                reverseAccAxis.IsChecked = _gameProfile.reverseAccelAxis;
+                reverseBrakeAxis.IsChecked = _gameProfile.reverseBrakeAxis;
+                textBoxDevice.Text = _gameProfile.devName;
+                textBoxShifter.Text = _gameProfile.shifterName;
             }
             catch
             {
@@ -140,9 +195,28 @@ namespace ZeroLauncher
         {
             List<TextBox> controls = GetAllTextBox();
 
+            //time to check if Rotation is used
+            if (controls[0].Text.Contains("Rotation"))
+            {
+                controls[0].Text = controls[0].Text.Replace("Rotation", "R");
+            }
+            if (controls[1].Text.Contains("Rotation"))
+            {
+                controls[1].Text = controls[1].Text.Replace("Rotation", "R");
+            }
+
+            if (controls[0].Text.Contains(" Axis"))
+            {
+                controls[0].Text = controls[0].Text.Replace(" Axis", "");
+            }
+            if (controls[1].Text.Contains(" Axis"))
+            {
+                controls[1].Text = controls[1].Text.Replace(" Axis", "");
+            }
+
             //transfer settings to IDZConfig
-            _gameProfile.brakeAxis = controls[0].Text.Replace("Buttons", "");
-            _gameProfile.accelAxis = controls[1].Text.Replace("Buttons", "");
+            _gameProfile.brakeAxis = controls[0].Text;
+            _gameProfile.accelAxis = controls[1].Text;
             _gameProfile.startButton = controls[2].Text.Replace("Buttons", "");
             _gameProfile.viewChg = controls[3].Text.Replace("Buttons", "");
             _gameProfile.shiftDn = controls[4].Text.Replace("Buttons", "");
@@ -153,6 +227,10 @@ namespace ZeroLauncher
             _gameProfile.gear4 = controls[9].Text.Replace("Buttons", "");
             _gameProfile.gear5 = controls[10].Text.Replace("Buttons", "");
             _gameProfile.gear6 = controls[11].Text.Replace("Buttons", "");
+            _gameProfile.reverseAccelAxis = (bool)reverseAccAxis.IsChecked;
+            _gameProfile.reverseBrakeAxis = (bool)reverseBrakeAxis.IsChecked;
+            _gameProfile.devName = textBoxDevice.Text;
+            _gameProfile.shifterName = textBoxShifter.Text;
 
             MainWindow.gameConfig = _gameProfile;
 

@@ -5,25 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZeroLauncher"
         mc:Ignorable="d"
-        Title="ZeroLauncher by nzgamer41" Height="450" Width="800" MaxHeight="450" MaxWidth="800" MinHeight="450" MinWidth="800" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Label Content="ZeroLauncher" Margin="261,1,261,358" FontSize="36"/>
-        <TextBox x:Name="textBoxGameAMFS" Height="23" Margin="43,89,481,0" TextWrapping="Wrap" VerticalAlignment="Top" MouseDown="TextBoxGameAMFS_MouseDown" PreviewMouseDown="TextBoxGameAMFS_PreviewMouseDown" />
-        <Label Content="Please locate the game's AMFS Directory here:" Margin="43,58,481,0" VerticalAlignment="Top" RenderTransformOrigin="0.545,0.089"/>
-        <ComboBox x:Name="comboBoxNetAdapter" Margin="400,90,68,0" VerticalAlignment="Top" SelectionChanged="ComboBoxNetAdapter_SelectionChanged"/>
-        <Label Content="Pick the network adapter you intend to use with the game" Margin="400,59,49,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="buttonJap" Content="Japanese" Margin="43,131,623,0" VerticalAlignment="Top" GroupName="Region"/>
-        <RadioButton x:Name="buttonExp" Content="Export" Margin="43,146,623,0" VerticalAlignment="Top" GroupName="Region" IsChecked="True"/>
-        <CheckBox x:Name="checkBoxIdeal" Content="Emulate an ideal LAN environment?" Margin="400,117,49,0" VerticalAlignment="Top"/>
-        <CheckBox x:Name="checkBoxDistServ" Content="Enable Distribution Server (only one person should have &#xD;&#xA;this ticked for LAN play)" Margin="400,137,49,0" VerticalAlignment="Top" Height="33"/>
-        <RadioButton x:Name="buttonXinput" Content="XInput (for Xbox Controllers)" Margin="43,190,494,0" VerticalAlignment="Top" GroupName="Control" IsChecked="True"/>
-        <RadioButton x:Name="buttonDinput" Content="DInput (for PS4 controllers or wheels)" Margin="43,205,494,0" VerticalAlignment="Top" GroupName="Control"/>
-        <CheckBox x:Name="checkBoxAime" Content="Enable MiniMe AIME emulation (will be togglable soon!)" Margin="400,178,49,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
-        <Button x:Name="buttonLaunch" Content="LAUNCH" Margin="267,262,282,88" RenderTransformOrigin="-0.178,-0.05" FontSize="36" Click="Button_Click"/>
-        <Button IsEnabled="False" x:Name="buttonControls" Content="Configure Controls" HorizontalAlignment="Left" Margin="43,225,0,0" VerticalAlignment="Top" Width="255" RenderTransformOrigin="-3.893,0.65" Height="32" Click="ButtonControls_Click" ToolTip="Sorry, but this isn't enabled till I fix segatools!"/>
-        <Button x:Name="buttonClose" Content="FORCE CLOSE" HorizontalAlignment="Left" Margin="267,336,0,0" VerticalAlignment="Top" Width="243" RenderTransformOrigin="-0.24,-0.85" Height="69" FontSize="36" IsEnabled="False" Visibility="Hidden" Click="buttonClose_Click"/>
-    </Grid>
+        Title="ZeroLauncher by nzgamer41" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown" ContentRendered="Window_ContentRendered" Height="520" Width="640" MinWidth="640" MinHeight="520" MaxWidth="640" MaxHeight="520">
+    <StackPanel>
+        <Label Content="ZeroLauncher" FontSize="36" HorizontalAlignment="Center"/>
+        <Label Content="Please locate the game's AMFS Directory here:"  VerticalAlignment="Top" RenderTransformOrigin="0.545,0.089" HorizontalAlignment="Center"/>
+        <TextBox x:Name="textBoxGameAMFS" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" MouseDown="TextBoxGameAMFS_MouseDown" PreviewMouseDown="TextBoxGameAMFS_PreviewMouseDown" />
+        <Label Content="Pick the network adapter you intend to use with the game" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+        <ComboBox x:Name="comboBoxNetAdapter" VerticalAlignment="Top" SelectionChanged="ComboBoxNetAdapter_SelectionChanged"/>
+        <Separator></Separator>
+        <RadioButton x:Name="buttonJap" Content="Japanese" VerticalAlignment="Top" GroupName="Region" HorizontalAlignment="Center"/>
+        <RadioButton x:Name="buttonExp" Content="Export"  VerticalAlignment="Top" GroupName="Region" IsChecked="True" HorizontalAlignment="Center"/>
+        <Separator></Separator>
+        <RadioButton x:Name="buttonXinput" Content="XInput (for Xbox Controllers)" VerticalAlignment="Top" GroupName="Control" Checked="buttonXinput_Checked" HorizontalAlignment="Center"/>
+        <RadioButton x:Name="buttonDinput" Content="DInput (for PS4 controllers or wheels)" VerticalAlignment="Top" GroupName="Control" Checked="buttonDinput_Checked" HorizontalAlignment="Center"/>
+        <Separator></Separator>
+        <CheckBox x:Name="checkBoxIdeal" Content="Emulate an ideal LAN environment?"  VerticalAlignment="Top" HorizontalAlignment="Center"/>
+        <CheckBox x:Name="checkBoxDistServ" Content="Enable Distribution Server (only one person should have &#xD;&#xA;this ticked for LAN play)"  VerticalAlignment="Top" Height="33" HorizontalAlignment="Center"/>
+        <Separator></Separator>
+        <CheckBox x:Name="checkBoxAime" Content="Enable MiniMe AIME emulation (will be togglable soon!)"  VerticalAlignment="Top" IsChecked="True" IsEnabled="False" HorizontalAlignment="Center"/>
+        <Separator></Separator>
+        <Button x:Name="buttonLaunch" Content="LAUNCH" RenderTransformOrigin="-0.178,-0.05" FontSize="36" Click="Button_Click" HorizontalAlignment="Center"/>
+        <Button x:Name="buttonClose" Content="FORCE CLOSE" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="243" RenderTransformOrigin="-0.24,-0.85" Height="69" FontSize="36" IsEnabled="False" Visibility="Hidden" Click="buttonClose_Click"/>
+        <Button IsEnabled="False" x:Name="buttonControls" Content="Configure Controls (DInput only)" HorizontalAlignment="Center" VerticalAlignment="Top" Width="255" RenderTransformOrigin="-3.893,0.65" Height="32" Click="ButtonControls_Click"/>
+    </StackPanel>
 </Window>

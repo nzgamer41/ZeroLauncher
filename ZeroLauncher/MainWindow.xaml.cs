@@ -70,16 +70,6 @@ namespace ZeroLauncher
                     }
 
                     textBoxGameAMFS.Text = gameConfig.AMFSDir;
-                    if (gameConfig.XOrDInput)
-                    {
-                        buttonDinput.IsChecked = false;
-                        buttonXinput.IsChecked = true;
-                    }
-                    else if (gameConfig.XOrDInput == false)
-                    {
-                        buttonDinput.IsChecked = true;
-                        buttonXinput.IsChecked = false;
-                    }
 
                     checkBoxIdeal.IsChecked = gameConfig.IdealLan;
                     checkBoxDistServ.IsChecked = gameConfig.DistServer;
@@ -418,6 +408,31 @@ namespace ZeroLauncher
         private void buttonClose_Click(object sender, RoutedEventArgs e)
         {
             flipTerm();
+        }
+
+        private void buttonDinput_Checked(object sender, RoutedEventArgs e)
+        {
+            buttonControls.IsEnabled = true;
+        }
+
+        private void buttonXinput_Checked(object sender, RoutedEventArgs e)
+        {
+            buttonControls.IsEnabled = false;
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            if (gameConfig.XOrDInput)
+            {
+                buttonDinput.IsChecked = false;
+                buttonXinput.IsChecked = true;
+            }
+            else if (gameConfig.XOrDInput == false)
+            {
+                buttonDinput.IsChecked = true;
+                buttonXinput.IsChecked = false;
+            }
+
         }
     }
 }
