@@ -184,11 +184,11 @@ namespace ZeroLauncher
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            configUpdate();
-            gameConfig.ExportConfig();
-            //Double checking the folder is actually selected
             if (textBoxGameAMFS.Text != "")
             {
+                configUpdate();
+                gameConfig.ExportConfig();
+                //Double checking the folder is actually selected
                 gameBoot();
             }
             else
