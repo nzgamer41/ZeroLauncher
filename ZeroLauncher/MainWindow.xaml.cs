@@ -20,6 +20,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
 using WPFFolderBrowser;
+using AutoUpdaterDotNET;
 
 namespace ZeroLauncher
 {
@@ -34,6 +35,7 @@ namespace ZeroLauncher
         List<NetworkInterface> networkAdapters = new List<NetworkInterface>();
         public MainWindow()
         {
+            AutoUpdater.Start("https://raw.githubusercontent.com/nzgamer41/ZeroLauncher/master/Autoupdate.xml");
             try
             {
                 InitializeComponent();
@@ -184,12 +186,15 @@ namespace ZeroLauncher
         {
             configUpdate();
             gameConfig.ExportConfig();
-            //MessageBox.Show("bruh im not that far yet lol");
-            if (!gameConfig.XOrDInput)
+            //Double checking the folder is actually selected
+            if (textBoxGameAMFS.Text != "")
             {
-                MessageBox.Show("It appears you're using DirectInput. There is a bug at the moment with ZeroLauncher that means that the controls get overwritten every time you launch the game.\nThis messagebox is here so you can go and edit that textbox BEFORE the game starts, to get your controls working. Refer to README BEFORE USE for more information.");
+                gameBoot();
             }
-            gameBoot();
+            else
+            {
+                MessageBox.Show("You should probably select the AMFS folder first....\n\nDon't know how you expect to run the game without it?");
+            }
         }
 
         [DllImport("kernel32.dll", SetLastError = true)]
@@ -260,7 +265,7 @@ namespace ZeroLauncher
             if (!File.Exists(gameConfig.AMFSDir + "\\..\\app\\package\\inject.exe"))
             {
                 Debug.WriteLine("missing segatools!");
-                MessageBox.Show("You appear to be missing Segatools!\n\nCopy this from the 'deps\\segatools' folder into your 'package' folder where the main game files are,", "Missing segatools", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("You appear to be missing Segatools!\n\nCopy this from the 'deps\\segatools' folder into your 'package' folder where the main game files are.\n\nAlso make sure that you've left the amfs folder into the normal spot (so the same folder as app and pack.", "Missing segatools", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
             AllocConsole();
