@@ -8,6 +8,7 @@
         Title="ZeroLauncher by nzgamer41" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown" ContentRendered="Window_ContentRendered" Height="520" Width="640" MinWidth="640" MinHeight="520" MaxWidth="640" MaxHeight="520">
     <StackPanel>
         <Label Content="ZeroLauncher" FontSize="36" HorizontalAlignment="Center"/>
+        <Button Content="Join Discord Server" HorizontalAlignment="Center" Click="Button_Click_1"/>
         <Label Content="Please locate the game's AMFS Directory here:"  VerticalAlignment="Top" RenderTransformOrigin="0.545,0.089" HorizontalAlignment="Center"/>
         <TextBox x:Name="textBoxGameAMFS" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" MouseDown="TextBoxGameAMFS_MouseDown" PreviewMouseDown="TextBoxGameAMFS_PreviewMouseDown" />
         <Label Content="Pick the network adapter you intend to use with the game" VerticalAlignment="Top" HorizontalAlignment="Center"/>
@@ -27,5 +28,6 @@
         <Button x:Name="buttonLaunch" Content="LAUNCH" RenderTransformOrigin="-0.178,-0.05" FontSize="36" Click="Button_Click" HorizontalAlignment="Center"/>
         <Button x:Name="buttonClose" Content="FORCE CLOSE" HorizontalAlignment="Center"  VerticalAlignment="Top" Width="243" RenderTransformOrigin="-0.24,-0.85" Height="69" FontSize="36" IsEnabled="False" Visibility="Hidden" Click="buttonClose_Click"/>
         <Button IsEnabled="False" x:Name="buttonControls" Content="Configure Controls (DInput only)" HorizontalAlignment="Center" VerticalAlignment="Top" Width="255" RenderTransformOrigin="-3.893,0.65" Height="32" Click="ButtonControls_Click"/>
+
     </StackPanel>
 </Window>

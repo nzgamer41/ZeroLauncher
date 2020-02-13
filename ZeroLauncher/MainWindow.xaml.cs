@@ -286,7 +286,7 @@ namespace ZeroLauncher
             }
             else
             {
-                MessageBox.Show("You don't have Node.js installed! MiniMe requires this! Quitting game.",
+                MessageBox.Show("It appears you don't have NodeJS installed! We could not find it in your PATH environment variable, if for some reason you have it installed in a folder that doesn't contain the word 'node', this will get confusing.\n\nThe default is: C:\\Program Files\\nodejs.\n\nMiniMe requires node! Quitting game.",
                     "Missing dependency", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
@@ -380,22 +380,17 @@ namespace ZeroLauncher
         }
         public bool isNodeInstalled()
         {
-            // FUCK NODE
-            if (Directory.Exists("C:\\Program Files\\nodejs"))
+            // FUCK NODE 2 ELECTRIC BOOGALOO
+            string envVars = Environment.GetEnvironmentVariable("PATH");
+            Debug.WriteLine(envVars);
+            if (envVars.Contains("node"))
             {
-                if (File.Exists("C:\\Program Files\\nodejs\\npm.cmd"))
-                {
-                    // fuck you
-                    return true;
-                }
-                else
-                {
-                    MessageBox.Show("You're missing NPM somehow, google how to install it.");
-                    return false;
-                }
+                return true;
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         private void ButtonControls_Click(object sender, RoutedEventArgs e)
@@ -438,6 +433,11 @@ namespace ZeroLauncher
                 buttonXinput.IsChecked = false;
             }
 
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            Process.Start("https://discord.io/ZeroLauncher");
         }
     }
 }
