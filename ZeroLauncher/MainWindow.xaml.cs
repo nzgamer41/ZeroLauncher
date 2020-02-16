@@ -35,6 +35,9 @@ namespace ZeroLauncher
         List<NetworkInterface> networkAdapters = new List<NetworkInterface>();
         public MainWindow()
         {
+#if DEBUG
+            InitLCD();
+#endif
             AutoUpdater.Start("https://raw.githubusercontent.com/nzgamer41/ZeroLauncher/master/Autoupdate.xml");
             try
             {
@@ -77,6 +80,19 @@ namespace ZeroLauncher
                     checkBoxDistServ.IsChecked = gameConfig.DistServer;
                     // When I implement a online AIME server this will be togglable
                     //checkBoxAime.IsChecked = gameConfig.ImitateMe;
+                    string reg = "Japan";
+                    if (gameConfig.JapOrExp)
+                    {
+                        reg = "Export";
+                    }
+                    string reg2 = "DInput";
+                    if (gameConfig.XOrDInput)
+                    {
+                        reg2 = "XInput";
+                    }
+                    writeToLCD("Game Region: " + reg, 1);
+                    writeToLCD("Controller Type: " + reg2, 2);
+                    writeToLCD("IP Address: " + gameConfig.selectedIP, 3);
                 }
                 else
                 {
@@ -107,6 +123,19 @@ namespace ZeroLauncher
             }
         }
 
+        private void InitLCD()
+        {
+            LogitechGSDK.LogiLcdInit("ZeroLauncher", LogitechGSDK.LOGI_LCD_TYPE_MONO);
+            LogitechGSDK.LogiLcdMonoSetText(0, "ZeroLauncher");
+            LogitechGSDK.LogiLcdUpdate();
+        }
+
+        private void writeToLCD(string msgToWrite, int lineNo)
+        {
+            LogitechGSDK.LogiLcdMonoSetText(lineNo,msgToWrite);
+            LogitechGSDK.LogiLcdUpdate();
+        }
+
         /// <summary>
         /// Reads an object instance from a binary file.
         /// </summary>
@@ -129,6 +158,14 @@ namespace ZeroLauncher
         private void ComboBoxNetAdapter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             gameConfig.selectedNic = networkAdapters[comboBoxNetAdapter.SelectedIndex].Name;
+            foreach (UnicastIPAddressInformation ip in networkAdapters[comboBoxNetAdapter.SelectedIndex].GetIPProperties().UnicastAddresses)
+            {
+                if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                {
+                    gameConfig.selectedIP = ip.Address.ToString();
+                }
+            }
+            writeToLCD("IP Address: " + gameConfig.selectedIP, 3);
         }
 
         private void configUpdate()
@@ -413,11 +450,13 @@ namespace ZeroLauncher
         private void buttonDinput_Checked(object sender, RoutedEventArgs e)
         {
             buttonControls.IsEnabled = true;
+            writeToLCD("Controller Type: " + "DInput", 2);
         }
 
         private void buttonXinput_Checked(object sender, RoutedEventArgs e)
         {
             buttonControls.IsEnabled = false;
+            writeToLCD("Controller Type: " + "XInput", 2);
         }
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -438,6 +477,16 @@ namespace ZeroLauncher
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             Process.Start("https://discord.io/ZeroLauncher");
+        }
+
+        private void buttonJap_Checked(object sender, RoutedEventArgs e)
+        {
+            writeToLCD("Game Region: " + "Japan", 1);
+        }
+
+        private void buttonExp_Checked(object sender, RoutedEventArgs e)
+        {
+            writeToLCD("Game Region: " + "Export", 1);
         }
     }
 }

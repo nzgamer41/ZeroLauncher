@@ -46,6 +46,21 @@ namespace ZeroLauncher
                 joystickGuid = device.InstanceGuid;
                 break;
             }
+            foreach (var device in dInput.GetDevices(DeviceType.Driving, DeviceEnumerationFlags.AttachedOnly))
+            {
+                joystickGuid = device.InstanceGuid;
+                break;
+            }
+            foreach (var device in dInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AttachedOnly))
+            {
+                joystickGuid = device.InstanceGuid;
+                break;
+            }
+            foreach (var device in dInput.GetDevices(DeviceType.FirstPerson, DeviceEnumerationFlags.AttachedOnly))
+            {
+                joystickGuid = device.InstanceGuid;
+                break;
+            }
             if (joystickGuid == Guid.Empty)
             {
                 MessageBox.Show("No DirectInput joystick connected");

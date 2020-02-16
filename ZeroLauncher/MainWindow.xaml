@@ -14,8 +14,8 @@
         <Label Content="Pick the network adapter you intend to use with the game" VerticalAlignment="Top" HorizontalAlignment="Center"/>
         <ComboBox x:Name="comboBoxNetAdapter" VerticalAlignment="Top" SelectionChanged="ComboBoxNetAdapter_SelectionChanged"/>
         <Separator></Separator>
-        <RadioButton x:Name="buttonJap" Content="Japanese" VerticalAlignment="Top" GroupName="Region" HorizontalAlignment="Center"/>
-        <RadioButton x:Name="buttonExp" Content="Export"  VerticalAlignment="Top" GroupName="Region" IsChecked="True" HorizontalAlignment="Center"/>
+        <RadioButton x:Name="buttonJap" Content="Japanese" VerticalAlignment="Top" GroupName="Region" HorizontalAlignment="Center" Checked="buttonJap_Checked"/>
+        <RadioButton x:Name="buttonExp" Content="Export"  VerticalAlignment="Top" GroupName="Region" IsChecked="True" HorizontalAlignment="Center" Checked="buttonExp_Checked"/>
         <Separator></Separator>
         <RadioButton x:Name="buttonXinput" Content="XInput (for Xbox Controllers)" VerticalAlignment="Top" GroupName="Control" Checked="buttonXinput_Checked" HorizontalAlignment="Center"/>
         <RadioButton x:Name="buttonDinput" Content="DInput (for PS4 controllers or wheels)" VerticalAlignment="Top" GroupName="Control" Checked="buttonDinput_Checked" HorizontalAlignment="Center"/>
