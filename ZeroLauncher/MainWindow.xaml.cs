@@ -78,6 +78,14 @@ namespace ZeroLauncher
 
                     checkBoxIdeal.IsChecked = gameConfig.IdealLan;
                     checkBoxDistServ.IsChecked = gameConfig.DistServer;
+                    if (gameConfig.restriction != 0)
+                    {
+                        restrictUpDown.Value = gameConfig.restriction;
+                    }
+                    else
+                    {
+                        restrictUpDown.Value = 97;
+                    }
                     // When I implement a online AIME server this will be togglable
                     //checkBoxAime.IsChecked = gameConfig.ImitateMe;
                     string reg = "Japan";
@@ -201,6 +209,7 @@ namespace ZeroLauncher
             gameConfig.DistServer = (bool)checkBoxDistServ.IsChecked;
             // When I implement a online AIME server this will be togglable
             //checkBoxAime.IsChecked = gameConfig.ImitateMe;
+            gameConfig.restriction = (int)restrictUpDown.Value;
             WriteToBinaryFile("idzconfig.bin", gameConfig, false);
         }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
