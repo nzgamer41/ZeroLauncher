@@ -112,6 +112,21 @@ namespace ZeroLauncher
                                 lemmefix = "Buttons" + buttonNo;
                                 this.Dispatcher.Invoke(() => { try { selTextBox.Text = lemmefix; } catch { } });
                             }
+                            else if (state.Offset.ToString().Contains("Sliders"))
+                            {
+                                /* FUCKING SHARPDX
+                                 * Lemme tell you why this is here.
+                                 * SharpDX for some fucking reason maps the buttons like "Button 1" on your DInput gamepad is called "Buttons0"
+                                 * segatools however uses the numbers that you see in controller settings, that start at 1.
+                                 * hence i need to increase the number.
+                                 */
+
+                                string lemmefix = state.Offset.ToString().Replace("Sliders", "");
+                                int buttonNo = int.Parse(lemmefix);
+                                buttonNo++;
+                                lemmefix = "Sliders" + buttonNo;
+                                this.Dispatcher.Invoke(() => { try { selTextBox.Text = lemmefix; } catch { } });
+                            }
                             else
                             {
                                 this.Dispatcher.Invoke(() => { try { selTextBox.Text = state.Offset.ToString(); } catch { } });
@@ -173,13 +188,29 @@ namespace ZeroLauncher
                 {
                     controls[0].Text = _gameProfile.brakeAxis.Replace("R", "Rotation");
                 }
+                else if (_gameProfile.brakeAxis.Contains("U"))
+                {
+                    controls[0].Text = _gameProfile.brakeAxis.Replace("U", "Sliders1");
+                }
+                else if (_gameProfile.brakeAxis.Contains("V"))
+                {
+                    controls[0].Text = _gameProfile.brakeAxis.Replace("V", "Sliders2");
+                }
                 else
                 {
                     controls[0].Text = _gameProfile.brakeAxis + " Axis";
                 }
-                if (controls[1].Text.Contains("R"))
+                if (_gameProfile.accelAxis.Contains("R"))
                 {
                     controls[1].Text = _gameProfile.accelAxis.Replace("R", "Rotation");
+                }
+                else if (_gameProfile.accelAxis.Contains("U"))
+                {
+                    controls[0].Text = _gameProfile.accelAxis.Replace("U", "Sliders1");
+                }
+                else if (_gameProfile.accelAxis.Contains("V"))
+                {
+                    controls[0].Text = _gameProfile.accelAxis.Replace("V", "Sliders2");
                 }
                 else
                 {
@@ -209,6 +240,25 @@ namespace ZeroLauncher
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             List<TextBox> controls = GetAllTextBox();
+
+            if (controls[0].Text.Equals("Sliders1"))
+            {
+                controls[0].Text = controls[0].Text.Replace("Sliders1", "U");
+            }
+            if (controls[1].Text.Contains("Sliders1"))
+            {
+                controls[1].Text = controls[1].Text.Replace("Sliders1", "U");
+            }
+
+            if (controls[0].Text.Equals("Sliders2"))
+            {
+                controls[0].Text = controls[0].Text.Replace("Sliders2", "V");
+            }
+            if (controls[1].Text.Contains("Sliders2"))
+            {
+                controls[1].Text = controls[1].Text.Replace("Sliders2", "V");
+            }
+
 
             //time to check if Rotation is used
             if (controls[0].Text.Contains("Rotation"))
