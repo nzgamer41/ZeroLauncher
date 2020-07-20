@@ -17,6 +17,7 @@ namespace ZeroLauncher
         public string AMFSDir { get; set; }
         public bool JapOrExp { get; set; }
         public bool XOrDInput { get; set; }
+        public bool twinStick { get; set; }
         public string selectedNic { get; set; }
         public string selectedIP { get; set; }
         public bool IdealLan { get; set; }
@@ -99,11 +100,29 @@ namespace ZeroLauncher
             fileOutput += "[io3]\nmode=";
             if (XOrDInput)
             {
-                fileOutput += "xinput\nautoNeutral=1\nsingleStickSteering=1\nrestrict="+ restriction + "\n\n[dinput]\ndeviceName=\nshifterName=\nbrakeAxis=RZ\naccelAxis=Y\nstart=3\nviewChg=10\nshiftDn=1\nshiftUp=2\ngear1=1\ngear2=2\ngear3=3\ngear4=4\ngear5=5\ngear6=6\nreverseAccelAxis=0\nreverseBrakeAxis=0\n";
+                fileOutput += "xinput\nautoNeutral=1\nsingleStickSteering=";
+                if (twinStick)
+                {
+                    fileOutput += "0";
+                }
+                else
+                {
+                    fileOutput += "1";
+                }
+                fileOutput += "\nrestrict=" + restriction + "\n\n[dinput]\ndeviceName=\nshifterName=\nbrakeAxis=RZ\naccelAxis=Y\nstart=3\nviewChg=10\nshiftDn=1\nshiftUp=2\ngear1=1\ngear2=2\ngear3=3\ngear4=4\ngear5=5\ngear6=6\nreverseAccelAxis=0\nreverseBrakeAxis=0\n";
             }
             else
             {
-                fileOutput += "dinput\nautoNeutral=1\nsingleStickSteering=1\nrestrict=" + restriction + "\n\n[dinput]\ndeviceName=";
+                fileOutput += "dinput\nautoNeutral=1\nsingleStickSteering=";
+                if (twinStick)
+                {
+                    fileOutput += "0";
+                }
+                else
+                {
+                    fileOutput += "1";
+                }
+                fileOutput += "\nrestrict = " + restriction + "\n\n[dinput]\ndeviceName = ";
                 fileOutput += devName + "\nshifterName=" + shifterName + "\nbrakeAxis=" + brakeAxis + "\naccelAxis=" + accelAxis + "\nstart=" + startButton + "\nviewChg=" + viewChg + "\nshiftDn=" + shiftDn + "\nshiftUp=" + shiftUp + "\n";
                 if(gear1 != "" && gear2 != "" && gear3 != "" && gear4 != "" && gear5 != "" && gear6 != "")
                 {

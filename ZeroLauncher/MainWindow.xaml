@@ -15,13 +15,14 @@
         <Label Content="Pick the network adapter you intend to use with the game" VerticalAlignment="Top" HorizontalAlignment="Center"/>
         <ComboBox x:Name="comboBoxNetAdapter" VerticalAlignment="Top" SelectionChanged="ComboBoxNetAdapter_SelectionChanged"/>
         <Separator></Separator>
-        <RadioButton x:Name="buttonJap" Content="Japanese" VerticalAlignment="Top" GroupName="Region" HorizontalAlignment="Center" Checked="buttonJap_Checked"/>
-        <RadioButton x:Name="buttonExp" Content="Export"  VerticalAlignment="Top" GroupName="Region" IsChecked="True" HorizontalAlignment="Center" Checked="buttonExp_Checked"/>
+        <RadioButton x:Name="buttonJap" Content="Japanese" VerticalAlignment="Top" GroupName="Region" HorizontalAlignment="Center"/>
+        <RadioButton x:Name="buttonExp" Content="Export"  VerticalAlignment="Top" GroupName="Region" IsChecked="True" HorizontalAlignment="Center"/>
         <Separator></Separator>
         <RadioButton x:Name="buttonXinput" Content="XInput (for Xbox Controllers)" VerticalAlignment="Top" GroupName="Control" Checked="buttonXinput_Checked" HorizontalAlignment="Center"/>
         <RadioButton x:Name="buttonDinput" Content="DInput (for PS4 controllers or wheels)" VerticalAlignment="Top" GroupName="Control" Checked="buttonDinput_Checked" HorizontalAlignment="Center"/>
         <Label Content="Adjust scaling for steering wheel input" HorizontalAlignment="Center"/>
         <xctk:IntegerUpDown Name="restrictUpDown" Value="97" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <CheckBox x:Name="checkBoxTwinStick" Content="Enable twin-stick steering?"  VerticalAlignment="Top" HorizontalAlignment="Center"/>
         <Separator></Separator>
         <CheckBox x:Name="checkBoxIdeal" Content="Emulate an ideal LAN environment?"  VerticalAlignment="Top" HorizontalAlignment="Center"/>
         <CheckBox x:Name="checkBoxDistServ" Content="Enable Distribution Server (only one person should have &#xD;&#xA;this ticked for LAN play)"  VerticalAlignment="Top" Height="33" HorizontalAlignment="Center"/>
