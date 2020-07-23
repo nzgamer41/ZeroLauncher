@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="ZeroLauncher.SetupWizard.Intro"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZeroLauncher.SetupWizard"
+             mc:Ignorable="d" d:DesignWidth="392" Height="226">
+    <Grid>
+        <TextBlock Margin="10,40,10,0" VerticalAlignment="Top" RenderTransformOrigin="-3,-1.077" Height="39" Text="Welcome to the ZeroLauncher Setup Wizard! This wizard will help you setup ZeroLauncher for the first time." TextWrapping="Wrap"/>
+        <TextBlock Margin="10,84,10,0" VerticalAlignment="Top" RenderTransformOrigin="-3,-1.077" Height="39" Text="This will require an internet connection, and shouldn't take longer then 10 minutes to complete." TextWrapping="Wrap"/>
+
+    </Grid>
+</UserControl>

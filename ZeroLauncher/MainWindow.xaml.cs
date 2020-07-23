@@ -35,6 +35,10 @@ namespace ZeroLauncher
         List<NetworkInterface> networkAdapters = new List<NetworkInterface>();
         public MainWindow()
         {
+#if DEBUG
+            MainWindow_new mwNew = new MainWindow_new();
+            mwNew.ShowDialog();
+#endif
             AutoUpdater.Start("https://raw.githubusercontent.com/nzgamer41/ZeroLauncher/master/Autoupdate.xml");
             try
             {
