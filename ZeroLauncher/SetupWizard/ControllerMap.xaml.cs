@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SharpDX.DirectInput;
 
 namespace ZeroLauncher.SetupWizard
 {
@@ -20,15 +21,53 @@ namespace ZeroLauncher.SetupWizard
     /// </summary>
     public partial class ControllerMap : UserControl
     {
+        List<DeviceInstance> controllers = new List<DeviceInstance>();
+        private DirectInput dInput;
         MainWindow_new mainWindow;
         public ControllerMap()
         {
             InitializeComponent();
+            dInput = new DirectInput();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             mainWindow = Window.GetWindow(this) as MainWindow_new;
+            controllerList();
+        }
+
+        private void controllerList()
+        {
+            foreach (var device in dInput.GetDevices(DeviceType.Gamepad, DeviceEnumerationFlags.AttachedOnly))
+            {
+                controllers.Add(device);
+                listBoxDevices.Items.Add(device.ProductName);
+            }
+            foreach (var device in dInput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AttachedOnly))
+            {
+                controllers.Add(device);
+                listBoxDevices.Items.Add(device.ProductName);
+            }
+            foreach (var device in dInput.GetDevices(DeviceType.Driving, DeviceEnumerationFlags.AttachedOnly))
+            {
+                controllers.Add(device);
+                listBoxDevices.Items.Add(device.ProductName);
+            }
+            foreach (var device in dInput.GetDevices(DeviceType.Flight, DeviceEnumerationFlags.AttachedOnly))
+            {
+                controllers.Add(device);
+                listBoxDevices.Items.Add(device.ProductName);
+            }
+            foreach (var device in dInput.GetDevices(DeviceType.FirstPerson, DeviceEnumerationFlags.AttachedOnly))
+            {
+                controllers.Add(device);
+                listBoxDevices.Items.Add(device.ProductName);
+            }
+        }
+
+        private void listBoxDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            mainWindow.newConfig.devName = controllers[listBoxDevices.SelectedIndex].ProductName;
         }
     }
 }

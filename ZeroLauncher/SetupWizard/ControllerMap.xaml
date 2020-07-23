@@ -5,10 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeroLauncher.SetupWizard"
              mc:Ignorable="d" 
-             d:DesignHeight="226" d:DesignWidth="382" Loaded="UserControl_Loaded">
+             d:DesignHeight="317" d:DesignWidth="382" Loaded="UserControl_Loaded">
     <Grid>
-        <ListBox Margin="10,59,18,10"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Please map your controls here. Controller mappings can be changed any time from the ZeroLauncher main interface." VerticalAlignment="Top" Height="44" Width="372"/>
+        <ListBox x:Name="listBoxDevices" Margin="10,34,18,10" SelectionChanged="listBoxDevices_SelectionChanged"/>
+        <TextBlock Margin="10,10,18,0" TextWrapping="Wrap" Text="Please pick which device you want to use:" VerticalAlignment="Top" Height="24"/>
 
     </Grid>
 </UserControl>

@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeroLauncher.SetupWizard"
              mc:Ignorable="d" 
-             d:DesignHeight="226" d:DesignWidth="392" Loaded="UserControl_Loaded">
+             d:DesignHeight="317" d:DesignWidth="392" Loaded="UserControl_Loaded">
     <Grid>
-        <Button x:Name="buttonXinput" Content="XInput" HorizontalAlignment="Left" Margin="23,154,0,0" VerticalAlignment="Top" Width="122" Height="43" Click="Button_Click"/>
+        <Button x:Name="buttonXinput" Content="XInput" HorizontalAlignment="Left" Margin="34,223,0,0" VerticalAlignment="Top" Width="122" Height="43" Click="Button_Click"/>
         <TextBlock Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="-0.088,-2.208" Height="115"><Run Text="What style of controller do you have? If it's a Xbox controller (either Xbox 360 or Xbox One) click &quot;XInput&quot;, if it's a PlayStation 3 or 4 controller* OR you're using a wheel, for example the Logitech G series or Thrustmaster wheels, click DInput."/><LineBreak/><Run/><LineBreak/><Run Text="*If you're using DS4Windows with a PS4 controller, or a similar program with a PS3 controller (like SCP Tools), click XInput."/><LineBreak/><Run/></TextBlock>
-        <Button x:Name="buttonDinput" Content="DInput" Margin="242,154,28,0" VerticalAlignment="Top" Height="43" Click="buttonDinput_Click"/>
+        <Button x:Name="buttonDinput" Content="DInput" Margin="233,223,37,0" VerticalAlignment="Top" Height="43" Click="buttonDinput_Click"/>
 
     </Grid>
 </UserControl>

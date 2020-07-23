@@ -5,6 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZeroLauncher.SetupWizard"
              mc:Ignorable="d" 
-             d:DesignHeight="226" d:DesignWidth="392" Loaded="UserControl_Loaded">
-    <Grid/>
+             d:DesignHeight="317" d:DesignWidth="392" Loaded="UserControl_Loaded">
+    <Grid>
+        <TextBlock Margin="10,10,18,0" TextWrapping="Wrap" Text="One moment please, while ZeroLauncher checks for the prerequisites for running IDZ..." VerticalAlignment="Top" Height="42"/>
+        <ProgressBar x:Name="pbDl" Height="22" Margin="10,73,18,0" VerticalAlignment="Top" IsIndeterminate="True"/>
+        <TextBlock x:Name="textBlockStatus" HorizontalAlignment="Left" Margin="10,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="207" Width="364"/>
+    </Grid>
 </UserControl>
