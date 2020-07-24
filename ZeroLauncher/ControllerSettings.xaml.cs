@@ -25,7 +25,7 @@ namespace ZeroLauncher
         private bool _isXinput;
         private IDZConfig _gameProfile;
         private DirectInput dInput;
-        private static TextBox selTextBox;
+        private static TextBox selTextBox = new TextBox();
         private Joystick _joystick;
         private bool _listen;
         private Thread thControl;
@@ -70,10 +70,6 @@ namespace ZeroLauncher
             _joystick = new Joystick(dInput, joystickGuid);
             _joystick.Properties.BufferSize = 512;
             _joystick.Acquire();
-            ThreadStart thsControl = new ThreadStart(() => PollPad());
-            thControl = new Thread(thsControl);
-            thControl.Start();
-
         }
 
         private void PollPad()
@@ -183,38 +179,44 @@ namespace ZeroLauncher
             List<TextBox> controls = GetAllTextBox();
             try
             {
-                //time to check if Rotation is used
-                if (_gameProfile.brakeAxis.Contains("R"))
+                if (_gameProfile.brakeAxis != null)
                 {
-                    controls[0].Text = _gameProfile.brakeAxis.Replace("R", "Rotation");
+                    //time to check if Rotation is used
+                    if (_gameProfile.brakeAxis.Contains("R"))
+                    {
+                        controls[0].Text = _gameProfile.brakeAxis.Replace("R", "Rotation");
+                    }
+                    else if (_gameProfile.brakeAxis.Contains("U"))
+                    {
+                        controls[0].Text = _gameProfile.brakeAxis.Replace("U", "Sliders1");
+                    }
+                    else if (_gameProfile.brakeAxis.Contains("V"))
+                    {
+                        controls[0].Text = _gameProfile.brakeAxis.Replace("V", "Sliders2");
+                    }
+                    else
+                    {
+                        controls[0].Text = _gameProfile.brakeAxis + " Axis";
+                    }
                 }
-                else if (_gameProfile.brakeAxis.Contains("U"))
+                if (_gameProfile.accelAxis != null)
                 {
-                    controls[0].Text = _gameProfile.brakeAxis.Replace("U", "Sliders1");
-                }
-                else if (_gameProfile.brakeAxis.Contains("V"))
-                {
-                    controls[0].Text = _gameProfile.brakeAxis.Replace("V", "Sliders2");
-                }
-                else
-                {
-                    controls[0].Text = _gameProfile.brakeAxis + " Axis";
-                }
-                if (_gameProfile.accelAxis.Contains("R"))
-                {
-                    controls[1].Text = _gameProfile.accelAxis.Replace("R", "Rotation");
-                }
-                else if (_gameProfile.accelAxis.Contains("U"))
-                {
-                    controls[0].Text = _gameProfile.accelAxis.Replace("U", "Sliders1");
-                }
-                else if (_gameProfile.accelAxis.Contains("V"))
-                {
-                    controls[0].Text = _gameProfile.accelAxis.Replace("V", "Sliders2");
-                }
-                else
-                {
-                    controls[1].Text = _gameProfile.accelAxis + " Axis";
+                    if (_gameProfile.accelAxis.Contains("R"))
+                    {
+                        controls[1].Text = _gameProfile.accelAxis.Replace("R", "Rotation");
+                    }
+                    else if (_gameProfile.accelAxis.Contains("U"))
+                    {
+                        controls[0].Text = _gameProfile.accelAxis.Replace("U", "Sliders1");
+                    }
+                    else if (_gameProfile.accelAxis.Contains("V"))
+                    {
+                        controls[0].Text = _gameProfile.accelAxis.Replace("V", "Sliders2");
+                    }
+                    else
+                    {
+                        controls[1].Text = _gameProfile.accelAxis + " Axis";
+                    }
                 }
 
                 controls[2].Text = "Buttons" + _gameProfile.startButton;
@@ -307,6 +309,9 @@ namespace ZeroLauncher
         private void Window_ContentRendered(object sender, EventArgs e)
         {
             updateTextBoxes();
+            ThreadStart thsControl = new ThreadStart(() => PollPad());
+            thControl = new Thread(thsControl);
+            thControl.Start();
         }
     }
 }
