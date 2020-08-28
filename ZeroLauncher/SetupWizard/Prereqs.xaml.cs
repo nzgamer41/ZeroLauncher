@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.IO.Compression;
 
 namespace ZeroLauncher.SetupWizard
 {
@@ -29,11 +30,20 @@ namespace ZeroLauncher.SetupWizard
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             mainWindow = Window.GetWindow(this) as MainWindow_new;
+            mainWindow.buttonPrev.IsEnabled = false;
+            mainWindow.buttonNext.IsEnabled = false;
             beginCheck();
         }
 
         private async void beginCheck()
         {
+            if (mainWindow.redistsComplete)
+            {
+                textBlockStatus.Text = "Prerequisites have already been installed.";
+                mainWindow.buttonPrev.IsEnabled = true;
+                mainWindow.buttonNext.IsEnabled = true;
+                return;
+            }
             /* FUCK MICROSOFT
              * Why the fuck is there no easy way to check for the DirectX Redistributables
              * 
@@ -50,7 +60,7 @@ namespace ZeroLauncher.SetupWizard
             Process p = new Process();
             ProcessStartInfo si = new ProcessStartInfo();
             si.FileName = "dxwebsetup.exe";
-            //si.Arguments = "/Q";
+            si.Arguments = "/Q";
             p.StartInfo = si;
             p.Start();
             await Task.Run(() => p.WaitForExit());
@@ -82,7 +92,7 @@ namespace ZeroLauncher.SetupWizard
             string output = p.StandardOutput.ReadToEnd();
             p.WaitForExit();
             File.Delete("test.js");
-            if (output == "testjh\n")
+            if (output == "test\n")
             {
                 textBlockStatus.Text += "FOUND";
             }
@@ -100,8 +110,62 @@ namespace ZeroLauncher.SetupWizard
                 textBlockStatus.Text += "COMPLETE\n";
                 File.Delete("node-v12.18.3-x64.msi");
             }
+            // END NODE
+
+            //VS redists
+            textBlockStatus.Text += "\nInstalling Visual Studio Redistributibles...";
+            await Task.Run(() => downloadFile("http://nzgamer41.win/TeknoParrot/TPRedists/vcr.zip"));
+            //now the cooked shit begins
+            ZipFile.ExtractToDirectory(".\\vcr.zip", ".\\vcr");
+            runProcess(".\\vcr\\vcredist2005_x86.exe", p, si);
+            runProcess(".\\vcr\\vcredist2005_x64.exe", p, si);
+            runProcess(".\\vcr\\vcredist2008_x86.exe", p, si);
+            runProcess(".\\vcr\\vcredist2008_x64.exe", p, si);
+            runProcess(".\\vcr\\vcredist2010_x86.exe", p, si);
+            runProcess(".\\vcr\\vcredist2010_x64.exe", p, si);
+            runProcess(".\\vcr\\vcredist2012_x86.exe", p, si);
+            runProcess(".\\vcr\\vcredist2012_x64.exe", p, si);
+            runProcess(".\\vcr\\vcredist2013_x86.exe", p, si);
+            runProcess(".\\vcr\\vcredist2013_x64.exe", p, si);
+            runProcess(".\\vcr\\vcredist2015_2017_2019_x86.exe", p, si);
+            runProcess(".\\vcr\\vcredist2015_2017_2019_x64.exe", p, si);
+            textBlockStatus.Text += "COMPLETE\n";
+            File.Delete("vcr.zip");
+            Directory.Delete(".\\vcr", true);
+            pbDl.IsIndeterminate = false;
+            pbDl.Value = 100;
+            mainWindow.buttonNext.IsEnabled = true;
+            mainWindow.buttonPrev.IsEnabled = true;
+            mainWindow.redistsComplete = true;
         }
 
+        /// <summary>
+        /// Starts a process given a file name (for VC redists)
+        /// </summary>
+        async void runProcess(string filename, Process p, ProcessStartInfo si)
+        {
+            p = new Process();
+            si = new ProcessStartInfo();
+            si.FileName = filename;
+            if (filename.Contains("2005"))
+            {
+                si.Arguments = "/q";
+            }
+            else if (filename.Contains("2008"))
+            {
+                si.Arguments = "/qb";
+            }
+            else
+            {
+                si.Arguments = "/passive /norestart";
+            }
+            p.StartInfo = si;
+            p.Start();
+            //await Task.Run(() => p.WaitForExit());
+            p.WaitForExit();
+        }
+
+        
 
         void downloadFile(string fileToDownload)
         {

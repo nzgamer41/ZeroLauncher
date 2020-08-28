@@ -22,6 +22,7 @@ namespace ZeroLauncher
     {
         int curControl = 0;
         public IDZConfig newConfig = new IDZConfig();
+        public bool redistsComplete = false;
         public MainWindow_new()
         {
             InitializeComponent();
