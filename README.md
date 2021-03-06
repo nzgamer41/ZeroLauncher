@@ -1,7 +1,7 @@
 # ZeroLauncher
 ZeroLauncher is a Launcher for IDZ by the game company who made the blue hedgehog character using djhacker's segatools and minime!
 
-[![Join Discord](https://discordapp.com/api/guilds/675516988180660226/widget.png?style=banner1)](https://discord.io/ZeroLauncher)
+[![Join Discord](https://discordapp.com/api/guilds/675516988180660226/widget.png?style=banner1)](https://discord.link/ZeroLauncher)
 
 
 ## Installation
