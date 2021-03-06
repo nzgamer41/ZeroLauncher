@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("ZeroLauncher for IDZ")]
-[assembly: AssemblyCopyright("Copyright © nzgamer41 2020")]
+[assembly: AssemblyCopyright("Copyright © nzgamer41 2020 - 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

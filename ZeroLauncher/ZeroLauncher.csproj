@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Z.ico</ApplicationIcon>
+    <ApplicationIcon>Z2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -78,6 +78,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SetupWizard\GameSetup.xaml.cs">
+      <DependentUpon>GameSetup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SetupWizard\Prereqs.xaml.cs">
       <DependentUpon>Prereqs.xaml</DependentUpon>
     </Compile>
@@ -113,6 +116,10 @@
     <Page Include="MainWindow_new.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetupWizard\GameSetup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SetupWizard\Prereqs.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -151,6 +158,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />
@@ -166,7 +174,7 @@
     <None Include="Resources\Z.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Z.ico" />
+    <Resource Include="Z2.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

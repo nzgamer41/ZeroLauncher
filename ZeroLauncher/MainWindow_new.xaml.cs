@@ -31,19 +31,43 @@ namespace ZeroLauncher
 
         private void buttonNext_Click(object sender, RoutedEventArgs e)
         {
-            curControl++;
+            if (newConfig.XOrDInput && curControl == 1)
+            {
+                //Skip Controller Selector
+                curControl = 3;
+            }
+            else
+            {
+                curControl++;
+            }
             changeControl();
         }
 
         private void buttonPrev_Click(object sender, RoutedEventArgs e)
         {
-            curControl--;
+            if (newConfig.XOrDInput && curControl == 3)
+            {
+                //Skip Controller Selector
+                curControl = 1;
+            }
+            else
+            {
+                curControl--;
+            }
             changeControl();
         }
 
         public void nextUC()
         {
-            curControl++;
+            if (newConfig.XOrDInput && curControl == 1)
+            {
+                //Skip Controller Selector
+                curControl = 3;
+            }
+            else
+            {
+                curControl++;
+            }
             changeControl();
         }
 
@@ -64,6 +88,12 @@ namespace ZeroLauncher
                     break;
                 case 3:
                     setupWizard.Content = new SetupWizard.Prereqs();
+                    break;
+                case 4:
+                    setupWizard.Content = new SetupWizard.GameSetup();
+                    break;
+                default:
+                    this.Close();
                     break;
             }
         }

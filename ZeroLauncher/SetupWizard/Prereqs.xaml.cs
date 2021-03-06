@@ -37,6 +37,10 @@ namespace ZeroLauncher.SetupWizard
 
         private async void beginCheck()
         {
+#if DEBUG
+            //saves having to install them every time
+            //mainWindow.redistsComplete = true;
+#endif
             if (mainWindow.redistsComplete)
             {
                 textBlockStatus.Text = "Prerequisites have already been installed.";
@@ -56,16 +60,40 @@ namespace ZeroLauncher.SetupWizard
              */
             //BEGIN DX
             textBlockStatus.Text = "Installing DirectX Redistributibles...";
-            await Task.Run(() => downloadFile("https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe"));
+            //await Task.Run(() => downloadFile("https://download.microsoft.com/download/1/7/1/1718CCC4-6315-4D8E-9543-8E28A4E18C4C/dxwebsetup.exe"));
+            //FUCK MICROSOFT AGAIN HOLY SHIT WHY'D THEY REMOVE THE DIRECTX DOWNLOADS
+            if (File.Exists("DirectX.zip"))
+            {
+                try
+                {
+                    File.Delete("DirectX.zip");
+                    Directory.Delete(".\\DirectX", true);
+                }
+                catch
+                {
+
+                }
+            }
+            await Task.Run(() => downloadFile("https://nzgamer41.win/TeknoParrot/TPRedists/DirectX.zip"));
+            ZipFile.ExtractToDirectory(".\\DirectX.zip", ".\\DirectX");
+            pbDl.IsIndeterminate = true;
             Process p = new Process();
             ProcessStartInfo si = new ProcessStartInfo();
-            si.FileName = "dxwebsetup.exe";
+            await runProcess(".\\DirectX\\dxsetup.exe", p, si);
+            /*si.FileName = "dxwebsetup.exe";
             si.Arguments = "/Q";
             p.StartInfo = si;
             p.Start();
-            await Task.Run(() => p.WaitForExit());
+            await Task.Run(() => p.WaitForExit());*/
+
+
             textBlockStatus.Text += "COMPLETE\n";
-            File.Delete("dxwebsetup.exe");
+            //File.Delete("dxwebsetup.exe");
+
+            File.Delete("DirectX.zip");
+            Directory.Delete(".\\DirectX", true);
+
+
             //END DX
 
             //BEGIN NODE
@@ -99,6 +127,7 @@ namespace ZeroLauncher.SetupWizard
             else
             {
                 textBlockStatus.Text += "NOT FOUND, DOWNLOADING...";
+                pbDl.IsIndeterminate = false;
                 await Task.Run(() => downloadFile("https://nodejs.org/dist/v12.18.3/node-v12.18.3-x64.msi"));
                 Process process = new Process();
                 process.StartInfo.FileName = "msiexec";
@@ -117,18 +146,19 @@ namespace ZeroLauncher.SetupWizard
             await Task.Run(() => downloadFile("http://nzgamer41.win/TeknoParrot/TPRedists/vcr.zip"));
             //now the cooked shit begins
             ZipFile.ExtractToDirectory(".\\vcr.zip", ".\\vcr");
-            runProcess(".\\vcr\\vcredist2005_x86.exe", p, si);
-            runProcess(".\\vcr\\vcredist2005_x64.exe", p, si);
-            runProcess(".\\vcr\\vcredist2008_x86.exe", p, si);
-            runProcess(".\\vcr\\vcredist2008_x64.exe", p, si);
-            runProcess(".\\vcr\\vcredist2010_x86.exe", p, si);
-            runProcess(".\\vcr\\vcredist2010_x64.exe", p, si);
-            runProcess(".\\vcr\\vcredist2012_x86.exe", p, si);
-            runProcess(".\\vcr\\vcredist2012_x64.exe", p, si);
-            runProcess(".\\vcr\\vcredist2013_x86.exe", p, si);
-            runProcess(".\\vcr\\vcredist2013_x64.exe", p, si);
-            runProcess(".\\vcr\\vcredist2015_2017_2019_x86.exe", p, si);
-            runProcess(".\\vcr\\vcredist2015_2017_2019_x64.exe", p, si);
+            pbDl.IsIndeterminate = true;
+            await runProcess(".\\vcr\\vcredist2005_x86.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2005_x64.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2008_x86.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2008_x64.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2010_x86.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2010_x64.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2012_x86.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2012_x64.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2013_x86.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2013_x64.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2015_2017_2019_x86.exe", p, si);
+            await runProcess(".\\vcr\\vcredist2015_2017_2019_x64.exe", p, si);
             textBlockStatus.Text += "COMPLETE\n";
             File.Delete("vcr.zip");
             Directory.Delete(".\\vcr", true);
@@ -142,8 +172,10 @@ namespace ZeroLauncher.SetupWizard
         /// <summary>
         /// Starts a process given a file name (for VC redists)
         /// </summary>
-        async void runProcess(string filename, Process p, ProcessStartInfo si)
+        async Task runProcess(string filename, Process p, ProcessStartInfo si)
         {
+            bool isDone = false;
+
             p = new Process();
             si = new ProcessStartInfo();
             si.FileName = filename;
@@ -155,17 +187,25 @@ namespace ZeroLauncher.SetupWizard
             {
                 si.Arguments = "/qb";
             }
+            else if (filename.Contains("dxsetup"))
+            {
+                si.Arguments = "/silent";
+            }
             else
             {
                 si.Arguments = "/passive /norestart";
             }
+
             p.StartInfo = si;
             p.Start();
             //await Task.Run(() => p.WaitForExit());
-            p.WaitForExit();
+            while (!p.HasExited)
+            {
+                await Task.Delay(100);
+            }
         }
 
-        
+
 
         void downloadFile(string fileToDownload)
         {

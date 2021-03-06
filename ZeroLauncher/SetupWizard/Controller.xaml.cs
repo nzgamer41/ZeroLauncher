@@ -37,6 +37,7 @@ namespace ZeroLauncher.SetupWizard
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             mainWindow = Window.GetWindow(this) as MainWindow_new;
+            mainWindow.buttonNext.IsEnabled = false;
         }
 
         private void buttonDinput_Click(object sender, RoutedEventArgs e)

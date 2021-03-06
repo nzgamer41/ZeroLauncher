@@ -7,7 +7,7 @@
              mc:Ignorable="d" d:DesignWidth="392" Height="226">
     <Grid>
         <TextBlock Margin="10,40,10,0" VerticalAlignment="Top" RenderTransformOrigin="-3,-1.077" Height="39" Text="Welcome to the ZeroLauncher Setup Wizard! This wizard will help you setup ZeroLauncher for the first time." TextWrapping="Wrap"/>
-        <TextBlock Margin="10,84,10,0" VerticalAlignment="Top" RenderTransformOrigin="-3,-1.077" Height="39" Text="This will require an internet connection, and shouldn't take longer then 10 minutes to complete." TextWrapping="Wrap"/>
+        <TextBlock Margin="10,84,10,0" VerticalAlignment="Top" RenderTransformOrigin="-3,-1.077" Height="99" TextWrapping="Wrap"><Run Text="This will require an internet connection, and shouldn't take longer then 10 minutes to complete."/><LineBreak/><Run/><LineBreak/><Run Text="To skip this wizard, click the X in the top right hand corner."/></TextBlock>
 
     </Grid>
 </UserControl>

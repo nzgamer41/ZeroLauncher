@@ -36,8 +36,18 @@ namespace ZeroLauncher
         public MainWindow()
         {
 #if DEBUG
-            MainWindow_new mwNew = new MainWindow_new();
-            mwNew.ShowDialog();
+            if (!File.Exists("idzconfig.bin"))
+            {
+                MainWindow_new mwNew = new MainWindow_new();
+                mwNew.ShowDialog();
+                gameConfig = mwNew.newConfig;
+                if (!gameConfig.XOrDInput)
+                {
+                    ControllerSettings cs = new ControllerSettings(gameConfig, gameConfig.XOrDInput);
+                    cs.ShowDialog();
+                }
+                
+            }
 #endif
             AutoUpdater.Start("https://raw.githubusercontent.com/nzgamer41/ZeroLauncher/master/Autoupdate.xml");
             try
@@ -62,52 +72,62 @@ namespace ZeroLauncher
                 if (File.Exists("idzconfig.bin"))
                 {
                     gameConfig = ReadFromBinaryFile<IDZConfig>("idzconfig.bin");
-                    int selAdapter = networkAdapters.FindIndex(x => x.Name == gameConfig.selectedNic);
-                    comboBoxNetAdapter.SelectedIndex = selAdapter;
-                    if (gameConfig.JapOrExp)
-                    {
-                        buttonJap.IsChecked = false;
-                        buttonExp.IsChecked = true;
-                    }
-                    else if (gameConfig.JapOrExp == false)
-                    {
-                        buttonExp.IsChecked = false;
-                        buttonJap.IsChecked = true;
-                    }
-
-                    textBoxGameAMFS.Text = gameConfig.AMFSDir;
-
-                    checkBoxIdeal.IsChecked = gameConfig.IdealLan;
-                    checkBoxDistServ.IsChecked = gameConfig.DistServer;
-                    if (gameConfig.restriction != 0)
-                    {
-                        restrictUpDown.Value = gameConfig.restriction;
-                    }
-                    else
-                    {
-                        restrictUpDown.Value = 97;
-                    }
-                    // When I implement a online AIME server this will be togglable
-                    //checkBoxAime.IsChecked = gameConfig.ImitateMe;
-                    string reg = "Japan";
-                    if (gameConfig.JapOrExp)
-                    {
-                        reg = "Export";
-                    }
-                    string reg2 = "DInput";
-                    if (gameConfig.XOrDInput)
-                    {
-                        reg2 = "XInput";
-                    }
+                    updateUI();
                 }
                 else
                 {
                     comboBoxNetAdapter.SelectedIndex = 0;
+                    updateUI();
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+            }
+        }
+
+        private void updateUI()
+        {
+            int selAdapter = networkAdapters.FindIndex(x => x.Name == gameConfig.selectedNic);
+            if (selAdapter != -1)
+            {
+                comboBoxNetAdapter.SelectedIndex = selAdapter;
+            }
+
+            if (gameConfig.JapOrExp)
+            {
+                buttonJap.IsChecked = false;
+                buttonExp.IsChecked = true;
+            }
+            else if (gameConfig.JapOrExp == false)
+            {
+                buttonExp.IsChecked = false;
+                buttonJap.IsChecked = true;
+            }
+
+            textBoxGameAMFS.Text = gameConfig.AMFSDir;
+
+            checkBoxIdeal.IsChecked = gameConfig.IdealLan;
+            checkBoxDistServ.IsChecked = gameConfig.DistServer;
+            if (gameConfig.restriction != 0)
+            {
+                restrictUpDown.Value = gameConfig.restriction;
+            }
+            else
+            {
+                restrictUpDown.Value = 97;
+            }
+            // When I implement a online AIME server this will be togglable
+            //checkBoxAime.IsChecked = gameConfig.ImitateMe;
+            string reg = "Japan";
+            if (gameConfig.JapOrExp)
+            {
+                reg = "Export";
+            }
+            string reg2 = "DInput";
+            if (gameConfig.XOrDInput)
+            {
+                reg2 = "XInput";
             }
         }
 
@@ -468,7 +488,7 @@ namespace ZeroLauncher
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            Process.Start("https://discord.io/ZeroLauncher");
+            Process.Start("https://discord.link/ZeroLauncher");
         }
 
     }

@@ -20,8 +20,8 @@ namespace ZeroLauncher
         public bool twinStick { get; set; }
         public string selectedNic { get; set; }
         public string selectedIP { get; set; }
-        public bool IdealLan { get; set; }
-        public bool DistServer { get; set; }
+        public bool IdealLan { get; set; } = true;
+        public bool DistServer { get; set; } = true;
         public string brakeAxis { get; set; }
         public string accelAxis { get; set; }
         public string startButton { get; set; }
@@ -75,7 +75,8 @@ namespace ZeroLauncher
             {
                 fileOutput += "=1";
             }
-
+            //generates NEW CARD FOR IDZ2, OLD IDZ1 CARDS WILL NOT WORK
+            fileOutput += "\n\n[aime]\naimeGen=1\nfelicaGen=0";
             fileOutput += "\n\n[netenv]";
             if (IdealLan)
             {

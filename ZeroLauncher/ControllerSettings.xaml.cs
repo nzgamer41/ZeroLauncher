@@ -35,6 +35,12 @@ namespace ZeroLauncher
             InitializeComponent();
             _gameProfile = gameProfile;
             _isXinput = isXinput;
+            if (_isXinput)
+            {
+                MessageBox.Show("Whoops, somehow you've ended up here with XInput selected. Gonna close this now. XINPUT MAPPING COMING SOME TIME IN 2021!");
+                this.Close();
+            }
+
             if (_joystick != null)
             {
                 _joystick.Dispose();
